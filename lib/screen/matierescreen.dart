@@ -60,7 +60,7 @@ class _MatiereScreenState extends State<MatiereScreen> {
                     ],
                   ),
                   endActionPane: ActionPane(
-                    motion: ScrollMotion(),
+                    motion: const ScrollMotion(),
                     dismissible: DismissiblePane(onDismissed: () async {
                       await deleteMatier(snapshot.data[index]['matiereId']);
                       setState(() {
