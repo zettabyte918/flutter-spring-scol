@@ -59,12 +59,6 @@ class _MatierDialogState extends State<MatierDialog> {
             ),
             TextFormField(
               controller: coefMat,
-              validator: (String? value) {
-                if (value!.isEmpty) {
-                  return "Champs est obligatoire";
-                }
-                return null;
-              },
               decoration: const InputDecoration(labelText: "coef"),
             ),
             ElevatedButton(
@@ -79,7 +73,7 @@ class _MatierDialogState extends State<MatierDialog> {
                   }
                   Navigator.pop(context);
                 },
-                child: const Text(" Ajouter "))
+                child: const Text("Ajouter"))
           ],
         ),
       ),

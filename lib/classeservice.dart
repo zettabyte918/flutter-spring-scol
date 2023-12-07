@@ -20,24 +20,26 @@ Future getAllMatiers() async {
 }
 
 Future addMatier(Matier matier) async {
-  Response response =
-      await http.post(Uri.parse("http://localhost:8080/matier/add"),
-          headers: {"Content-type": "Application/json"},
-          body: jsonEncode(<String, dynamic>{
-            "matiereName": matier.matiereName,
-          }));
+  Response response = await http.post(
+      Uri.parse("http://localhost:8080/matier/add"),
+      headers: {"Content-type": "Application/json"},
+      body: jsonEncode(<String, dynamic>{
+        "matiereName": matier.matiereName,
+        "matiereCoef": matier.matiereCoef
+      }));
 
   return response.body;
 }
 
 Future updateMatier(Matier matier) async {
-  Response response = await http.put(
-      Uri.parse("http://localhost:8080/matier/update"),
-      headers: {"Content-type": "Application/json"},
-      body: jsonEncode(<String, dynamic>{
-        "matiereId": matier.matiereId,
-        "matiereName": matier.matiereName
-      }));
+  Response response =
+      await http.put(Uri.parse("http://localhost:8080/matier/update"),
+          headers: {"Content-type": "Application/json"},
+          body: jsonEncode(<String, dynamic>{
+            "matiereId": matier.matiereId,
+            "matiereName": matier.matiereName,
+            "matiereCoef": matier.matiereCoef
+          }));
 
   return response.body;
 }
