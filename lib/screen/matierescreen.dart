@@ -46,6 +46,7 @@ class _MatiereScreenState extends State<MatiereScreen> {
                                   notifyParent: refresh,
                                   matier: Matier(
                                     snapshot.data[index]['matiereName'],
+                                    snapshot.data[index]['matiereCoef'],
                                     snapshot.data[index]['matiereId'],
                                   ),
                                 );
@@ -82,6 +83,20 @@ class _MatiereScreenState extends State<MatiereScreen> {
                                 const Text("Matier : "),
                                 Text(
                                   snapshot.data[index]['matiereName'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(
+                                  width: 2.0,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Coef : "),
+                                Text(
+                                  snapshot.data[index]['matiereCoef']
+                                      .toString(),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),

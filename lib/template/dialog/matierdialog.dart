@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tp70/entities/classe.dart';
@@ -17,6 +19,7 @@ class MatierDialog extends StatefulWidget {
 
 class _MatierDialogState extends State<MatierDialog> {
   TextEditingController nameMat = TextEditingController();
+  TextEditingController coefMat = TextEditingController();
 
   String title = "Ajouter Matier";
   bool modif = false;
@@ -32,6 +35,7 @@ class _MatierDialogState extends State<MatierDialog> {
       modif = true;
       title = "Modifier matier";
       nameMat.text = (widget.matier!.matiereName).toString();
+      coefMat.text = (widget.matier!.matiereCoef).toString();
       idMatier = widget.matier!.matiereId!;
     }
   }
@@ -53,13 +57,24 @@ class _MatierDialogState extends State<MatierDialog> {
               },
               decoration: const InputDecoration(labelText: "nom"),
             ),
+            TextFormField(
+              controller: coefMat,
+              validator: (String? value) {
+                if (value!.isEmpty) {
+                  return "Champs est obligatoire";
+                }
+                return null;
+              },
+              decoration: const InputDecoration(labelText: "coef"),
+            ),
             ElevatedButton(
                 onPressed: () async {
                   if (modif == false) {
-                    await addMatier(Matier(nameMat.text));
+                    await addMatier(Matier(nameMat.text, coefMat.text));
                     widget.notifyParent!();
                   } else {
-                    await updateMatier(Matier(nameMat.text, idMatier));
+                    await updateMatier(
+                        Matier(nameMat.text, coefMat.text, idMatier));
                     widget.notifyParent!();
                   }
                   Navigator.pop(context);
