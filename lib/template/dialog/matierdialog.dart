@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:tp70/entities/classe.dart';
 import 'package:tp70/entities/matier.dart';
 import 'package:tp70/entities/student.dart';
-import 'package:tp70/classeservice.dart';
-import 'package:tp70/studentservice.dart';
+import 'package:tp70/services/classeservice.dart';
+import 'package:tp70/services/studentservice.dart';
 
 class MatierDialog extends StatefulWidget {
   final Function()? notifyParent;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:tp70/classeservice.dart';
+import 'package:tp70/services/classeservice.dart';
 import 'package:tp70/entities/matier.dart';
 import 'package:tp70/template/dialog/classedialog.dart';
 import 'package:tp70/template/dialog/matierdialog.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:tp70/formationservice.dart';
+import 'package:tp70/services/formationservice.dart';
 import 'package:tp70/template/dialog/formationdialog.dart';
 import 'package:tp70/template/navbar.dart';
 

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:tp70/entities/student.dart';
-import 'package:tp70/studentservice.dart';
+import 'package:tp70/services/studentservice.dart';
 
 import '../../entities/classe.dart';
-import '../../classeservice.dart';
+import '../../services/classeservice.dart';
 import 'package:http/http.dart' as http;
 
 class AddStudentDialog extends StatefulWidget {

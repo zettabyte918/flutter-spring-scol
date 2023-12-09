@@ -20,7 +20,18 @@ class Student {
       prenom: json['prenom'],
       id: json['id'],
       // Assuming 'classe' is a nested object in the JSON
-      classe: json.containsKey('classe') ? Classe.fromJson(json['classe']) : null,
+      classe:
+          json.containsKey('classe') ? Classe.fromJson(json['classe']) : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nom': nom,
+      'prenom': prenom,
+      'dateNais': dateNais,
+      'classe': classe?.toJson(), // Assuming 'classe' has a toJson method
+    };
   }
 }

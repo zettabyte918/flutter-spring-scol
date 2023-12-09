@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Matier {
   int? matiereId;
   String matiereName;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tp70/entities/formation.dart';
 import 'package:tp70/entities/student.dart';
-import 'package:tp70/formationservice.dart';
-import 'package:tp70/studentservice.dart';
+import 'package:tp70/services/formationservice.dart';
+import 'package:tp70/services/studentservice.dart';
 
 class FormationDialog extends StatefulWidget {
   final Function()? notifyParent;
