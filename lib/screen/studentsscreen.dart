@@ -25,6 +25,7 @@ class _StudentScreenState extends State<StudentScreen> {
     getAllClasses().then((result) {
       // ignore: unnecessary_type_check
       if (result is List<Classe>) {
+        print("success getting all classes");
         setState(() {
           classes = result;
         });
@@ -43,7 +44,6 @@ class _StudentScreenState extends State<StudentScreen> {
         "http://localhost:8080/etudiant/getByClasseId/${selectedClass.codClass}"));
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
-      print("JSON data received: $data"); // Add this line for debugging
       List<Student> studentsInClass =
           data.map((json) => Student.fromJson(json)).toList();
       setState(() {
@@ -116,7 +116,6 @@ class _StudentScreenState extends State<StudentScreen> {
               );
             },
           );
-          //print("test");
         },
         child: const Icon(Icons.add),
       ),

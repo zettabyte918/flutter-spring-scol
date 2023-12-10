@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tp70/screen/absencescreen.dart';
 import 'package:tp70/screen/matierescreen.dart';
 
 import 'screen/classscreen.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/students': (context) => StudentScreen(),
         '/class': (context) => ClasseScreen(),
         '/matier': (context) => MatiereScreen(),
+        '/absences': (context) => AbsenceScreen(),
         '/formation': (context) => FormationScreen()
       },
     );

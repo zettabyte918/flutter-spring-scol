@@ -22,16 +22,16 @@ class _ClasseScreenState extends State<ClasseScreen> {
       appBar: NavBar('classes'),
       body: FutureBuilder(
         future: getAllClasses(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Classe>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
               padding: const EdgeInsets.all(8),
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {
                 print(index);
-                print(snapshot.data[index]);
+                print(snapshot.data?[index]);
                 return Slidable(
-                  key: Key((snapshot.data[index]['codClass']).toString()),
+                  key: Key((snapshot.data?[index].codClass).toString()),
                   startActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
@@ -43,9 +43,9 @@ class _ClasseScreenState extends State<ClasseScreen> {
                                 return ClassDialog(
                                   notifyParent: refresh,
                                   classe: Classe(
-                                      snapshot.data[index]['nbreEtud'],
-                                      snapshot.data[index]['nomClass'],
-                                      snapshot.data[index]['codClass']),
+                                      snapshot.data![index].nbreEtud,
+                                      snapshot.data![index].nomClass,
+                                      snapshot.data![index].codClass),
                                 );
                               });
                           //print("test");
@@ -60,9 +60,9 @@ class _ClasseScreenState extends State<ClasseScreen> {
                   endActionPane: ActionPane(
                     motion: ScrollMotion(),
                     dismissible: DismissiblePane(onDismissed: () async {
-                      await deleteClass(snapshot.data[index]['codClass']);
+                      await deleteClass(snapshot.data![index].codClass!);
                       setState(() {
-                        snapshot.data.removeAt(index);
+                        snapshot.data?.removeAt(index);
                       });
                     }),
                     children: [Container()],
@@ -79,7 +79,7 @@ class _ClasseScreenState extends State<ClasseScreen> {
                               children: [
                                 const Text("Classe : "),
                                 Text(
-                                  snapshot.data[index]['nomClass'],
+                                  snapshot.data![index].nomClass,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -89,7 +89,7 @@ class _ClasseScreenState extends State<ClasseScreen> {
                               ],
                             ),
                             Text(
-                                "Nombre etudiants : ${snapshot.data[index]['nbreEtud']}"),
+                                "Nombre etudiants : ${snapshot.data![index].nbreEtud}"),
                           ],
                         ),
                       ),

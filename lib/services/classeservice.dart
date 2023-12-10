@@ -7,10 +7,16 @@ import 'package:tp70/entities/classe.dart';
 import 'package:tp70/entities/matier.dart';
 import 'package:tp70/entities/student.dart';
 
-Future getAllClasses() async {
+Future<List<Classe>> getAllClasses() async {
   Response response =
       await http.get(Uri.parse("http://localhost:8080/class/all"));
-  return jsonDecode(response.body);
+  List<dynamic> jsonResponse = jsonDecode(response.body);
+
+  // Assuming each item in the jsonResponse can be converted to a Classe
+  List<Classe> classes =
+      jsonResponse.map((json) => Classe.fromJson(json)).toList();
+
+  return classes;
 }
 
 Future getAllMatiers() async {
