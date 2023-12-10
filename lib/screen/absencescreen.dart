@@ -83,6 +83,7 @@ class AbsenceScreenState extends State<AbsenceScreen> {
               setState(() {
                 // ignore: cast_from_null_always_fails
                 selectedStudent = null;
+                absences = null;
                 selectedClass = value;
                 // Fetch students when a class is selected
                 if (selectedClass != null) {
@@ -117,12 +118,12 @@ class AbsenceScreenState extends State<AbsenceScreen> {
           ),
           Expanded(
               child: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: absences?.length,
+            padding: const EdgeInsets.all(0),
+            itemCount: absences?.length ?? 1,
             itemBuilder: (BuildContext context, int index) {
               if (absences != null) {
                 return Slidable(
-                  key: const Key("hh"),
+                  key: Key(absences!.elementAt(index).absenceId.toString()),
                   startActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
@@ -148,17 +149,30 @@ class AbsenceScreenState extends State<AbsenceScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(bottom: 30.0),
+                        margin: const EdgeInsets.all(10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                const Text("Absence : "),
+                                const Text(
+                                  "Student name: ",
+                                ),
+                                Text(
+                                  "${absences!.elementAt(index).etudiant?.nom} ${absences!.elementAt(index).etudiant?.prenom}",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Hours number: "),
                                 Text(
                                   absences!
                                       .elementAt(index)
-                                      .absenceId
+                                      .absenceNb
                                       .toString(),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -169,11 +183,19 @@ class AbsenceScreenState extends State<AbsenceScreen> {
                                 ),
                               ],
                             ),
-                            Text(
-                              "Nombre etudiants : ${absences!.elementAt(index).etudiant?.nom}",
-                            ),
-                            Text(
-                              "Matiere name : ${absences!.elementAt(index).matiere?.matiereName}",
+                            Row(
+                              children: [
+                                const Text("Matiere name: "),
+                                Text(
+                                    absences!
+                                        .elementAt(index)
+                                        .matiere!
+                                        .matiereName,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        backgroundColor:
+                                            Colors.lightBlueAccent))
+                              ],
                             ),
                           ],
                         ),
@@ -182,6 +204,16 @@ class AbsenceScreenState extends State<AbsenceScreen> {
                   ),
                 );
               }
+              // show whene selected student is null
+              return Container(
+                margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: const Text("Select a student!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w900,
+                        backgroundColor: Colors.red)),
+              );
             },
           )),
         ],
