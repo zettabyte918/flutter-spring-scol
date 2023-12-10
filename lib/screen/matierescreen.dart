@@ -46,8 +46,7 @@ class _MatiereScreenState extends State<MatiereScreen> {
                                   notifyParent: refresh,
                                   matier: Matier(
                                     snapshot.data[index]['matiereName'],
-                                    snapshot.data[index]['matiereCoef']
-                                        .toString(),
+                                    snapshot.data[index]['matiereCoef'],
                                     snapshot.data[index]['matiereId'],
                                   ),
                                 );

@@ -64,11 +64,12 @@ class _MatierDialogState extends State<MatierDialog> {
             ElevatedButton(
                 onPressed: () async {
                   if (modif == false) {
-                    await addMatier(Matier(nameMat.text, coefMat.text));
+                    await addMatier(
+                        Matier(nameMat.text, double.parse(coefMat.text)));
                     widget.notifyParent!();
                   } else {
-                    await updateMatier(
-                        Matier(nameMat.text, coefMat.text, idMatier));
+                    await updateMatier(Matier(
+                        nameMat.text, double.parse(coefMat.text), idMatier));
                     widget.notifyParent!();
                   }
                   Navigator.pop(context);

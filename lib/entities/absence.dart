@@ -6,8 +6,10 @@ class Absence {
   double? absenceNb;
   String? date;
   Student? etudiant;
+  Matier? matiere;
 
-  Absence(this.absenceNb, this.date, this.etudiant, [this.absenceId]);
+  Absence(this.absenceNb, this.date, this.etudiant, this.matiere,
+      [this.absenceId]);
 
   // Factory method to create an Absence object from JSON
   factory Absence.fromJson(Map<String, dynamic> json) {
@@ -17,15 +19,18 @@ class Absence {
         json.containsKey('etudiant')
             ? Student.fromJson(json['etudiant'])
             : null,
+        json.containsKey('matiere') ? Matier.fromJson(json['matiere']) : null,
         json['absenceId']);
   }
 
   // Add a method to convert the Absence object to JSON
   Map<String, dynamic> toJson() {
     return {
-      'absenceId': absenceId,
       'absenceNb': absenceNb,
       'date': date,
+      'etudiant': etudiant,
+      'matiere': matiere,
+      'absenceId': absenceId,
     };
   }
 }
