@@ -63,14 +63,9 @@ class _AddStudentDialogState extends State<AddStudentDialog> {
     // Use await to wait for the completion of the Future
     getAllClasses().then((result) {
       // Check if the result is a List<Classe> before assigning
-      if (result is List<Classe>) {
-        setState(() {
-          classes = result;
-        });
-      } else {
-        // Handle the case where the result is not a List<Classe>
-        print("Error: getAllClasses did not return a List<Classe>.");
-      }
+      setState(() {
+        classes = result;
+      });
     });
 
     if (widget.student != null) {

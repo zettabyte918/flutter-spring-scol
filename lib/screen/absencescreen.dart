@@ -5,6 +5,7 @@ import 'package:tp70/entities/absence.dart';
 import 'package:tp70/entities/student.dart';
 import 'package:tp70/services/classeservice.dart';
 import 'package:tp70/entities/matier.dart';
+import 'package:tp70/template/dialog/absencedialog.dart';
 import 'package:tp70/template/dialog/classedialog.dart';
 import 'package:tp70/template/dialog/matierdialog.dart';
 import 'package:tp70/template/navbar.dart';
@@ -34,6 +35,9 @@ class AbsenceScreenState extends State<AbsenceScreen> {
       setState(() {
         classes = result;
       });
+
+      print("class from absencescreen: " +
+          classes.elementAt(0).matieres.toString());
     });
   }
 
@@ -187,10 +191,11 @@ class AbsenceScreenState extends State<AbsenceScreen> {
                               children: [
                                 const Text("Matiere name: "),
                                 Text(
-                                    absences!
-                                        .elementAt(index)
-                                        .matiere!
-                                        .matiereName,
+                                    absences
+                                            ?.elementAt(index)
+                                            .matiere
+                                            ?.matiereName ??
+                                        'N/A',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         backgroundColor:
@@ -224,8 +229,11 @@ class AbsenceScreenState extends State<AbsenceScreen> {
           showDialog(
               context: context,
               builder: (BuildContext context) {
-                return MatierDialog(
+                return AbsenceDialog(
                   notifyParent: refresh,
+                  getAllAbsence: getAbsenceByStudentId,
+                  matieres: selectedClass?.matieres,
+                  absence: Absence(0, "", selectedStudent, null, null),
                 );
               });
           //print("test");

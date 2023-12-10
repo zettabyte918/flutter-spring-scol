@@ -33,7 +33,9 @@ class _MatiereScreenState extends State<MatiereScreen> {
                 print(index);
                 print(snapshot.data[index]);
                 return Slidable(
-                  key: Key((snapshot.data[index]['matiereId'].toString())),
+                  key: Key(((snapshot.data[index] as Matier)
+                      .matiereName
+                      .toString())),
                   startActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
@@ -45,9 +47,11 @@ class _MatiereScreenState extends State<MatiereScreen> {
                                 return MatierDialog(
                                   notifyParent: refresh,
                                   matier: Matier(
-                                    snapshot.data[index]['matiereName'],
-                                    snapshot.data[index]['matiereCoef'],
-                                    snapshot.data[index]['matiereId'],
+                                    (snapshot.data[index] as Matier)
+                                        .matiereName,
+                                    (snapshot.data[index] as Matier)
+                                        .matiereCoef,
+                                    (snapshot.data[index] as Matier).matiereId,
                                   ),
                                 );
                               });
@@ -82,7 +86,7 @@ class _MatiereScreenState extends State<MatiereScreen> {
                               children: [
                                 const Text("Matier : "),
                                 Text(
-                                  snapshot.data[index]['matiereName'],
+                                  (snapshot.data[index] as Matier).matiereName,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -95,7 +99,8 @@ class _MatiereScreenState extends State<MatiereScreen> {
                               children: [
                                 const Text("Coef : "),
                                 Text(
-                                  snapshot.data[index]['matiereCoef']
+                                  (snapshot.data[index] as Matier)
+                                      .matiereCoef
                                       .toString(),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),

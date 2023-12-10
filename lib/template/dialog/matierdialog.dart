@@ -65,7 +65,7 @@ class _MatierDialogState extends State<MatierDialog> {
                 onPressed: () async {
                   if (modif == false) {
                     await addMatier(
-                        Matier(nameMat.text, double.parse(coefMat.text)));
+                        Matier(nameMat.text, double.parse(coefMat.text)), 1);
                     widget.notifyParent!();
                   } else {
                     await updateMatier(Matier(

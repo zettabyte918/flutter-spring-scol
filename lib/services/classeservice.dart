@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:tp70/entities/absence.dart';
 
 import 'package:tp70/entities/classe.dart';
 import 'package:tp70/entities/matier.dart';
@@ -19,15 +20,35 @@ Future<List<Classe>> getAllClasses() async {
   return classes;
 }
 
-Future getAllMatiers() async {
+Future<List<Matier>> getAllMatiers() async {
   Response response =
       await http.get(Uri.parse("http://localhost:8080/matier/all"));
-  return jsonDecode(response.body);
+  List<dynamic> jsonResponse = jsonDecode(response.body);
+
+  // Assuming each item in the jsonResponse can be converted to a Classe
+  List<Matier> matieres =
+      jsonResponse.map((json) => Matier.fromJson(json)).toList();
+
+  return matieres;
 }
 
-Future addMatier(Matier matier) async {
+Future addAbsence(Absence absence) async {
+  Response response =
+      await http.post(Uri.parse("http://localhost:8080/absence/add"),
+          headers: {"Content-type": "Application/json"},
+          body: jsonEncode(<String, dynamic>{
+            "etudiant": {"id": absence.etudiant?.id},
+            "matiere": {"matiereId": absence.matiere?.matiereId},
+            "absenceNb": absence.absenceNb,
+            "date": absence.date
+          }));
+
+  return response.body;
+}
+
+Future addMatier(Matier matier, int classId) async {
   Response response = await http.post(
-      Uri.parse("http://localhost:8080/matier/add"),
+      Uri.parse("http://localhost:8080/matier/add?classId=$classId"),
       headers: {"Content-type": "Application/json"},
       body: jsonEncode(<String, dynamic>{
         "matiereName": matier.matiereName,

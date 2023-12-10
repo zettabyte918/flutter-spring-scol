@@ -69,11 +69,11 @@ class _ClassDialogState extends State<ClassDialog> {
                 onPressed: () async {
                   if (modif == false) {
                     await addClass(
-                        Classe(int.parse(nbrCtrl.text), nomCtrl.text));
+                        Classe(int.parse(nbrCtrl.text), nomCtrl.text, []));
                     widget.notifyParent!();
                   } else {
                     await updateClasse(Classe(
-                        int.parse(nbrCtrl.text), nomCtrl.text, idClasse));
+                        int.parse(nbrCtrl.text), nomCtrl.text, [], idClasse));
                     widget.notifyParent!();
                   }
                   Navigator.pop(context);

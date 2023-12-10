@@ -45,6 +45,7 @@ class _ClasseScreenState extends State<ClasseScreen> {
                                   classe: Classe(
                                       snapshot.data![index].nbreEtud,
                                       snapshot.data![index].nomClass,
+                                      [],
                                       snapshot.data![index].codClass),
                                 );
                               });
