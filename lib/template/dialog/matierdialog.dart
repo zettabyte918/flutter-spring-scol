@@ -20,6 +20,8 @@ class MatierDialog extends StatefulWidget {
 class _MatierDialogState extends State<MatierDialog> {
   TextEditingController nameMat = TextEditingController();
   TextEditingController coefMat = TextEditingController();
+  Classe? selectedClass;
+  List<Classe> classes = [];
 
   String title = "Ajouter Matier";
   bool modif = false;
@@ -30,6 +32,13 @@ class _MatierDialogState extends State<MatierDialog> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getAllClasses().then((result) {
+      // Check if the result is a List<Classe> before assigning
+      setState(() {
+        classes = result;
+      });
+    });
+
     print("hiii");
     if (widget.matier != null) {
       modif = true;
@@ -61,11 +70,27 @@ class _MatierDialogState extends State<MatierDialog> {
               controller: coefMat,
               decoration: const InputDecoration(labelText: "coef"),
             ),
+            DropdownButtonFormField<Classe>(
+              value: selectedClass,
+              onChanged: (Classe? value) {
+                setState(() {
+                  selectedClass = value;
+                });
+              },
+              items: classes.map((Classe classe) {
+                return DropdownMenuItem<Classe>(
+                  value: classe,
+                  child: Text(classe.nomClass),
+                );
+              }).toList(),
+              decoration: const InputDecoration(labelText: "Classe"),
+            ),
             ElevatedButton(
                 onPressed: () async {
                   if (modif == false) {
                     await addMatier(
-                        Matier(nameMat.text, double.parse(coefMat.text)), 1);
+                        Matier(nameMat.text, double.parse(coefMat.text)),
+                        selectedClass!.codClass!);
                     widget.notifyParent!();
                   } else {
                     await updateMatier(Matier(

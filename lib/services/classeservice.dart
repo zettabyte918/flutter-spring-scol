@@ -48,7 +48,7 @@ Future addAbsence(Absence absence) async {
 
 Future addMatier(Matier matier, int classId) async {
   Response response = await http.post(
-      Uri.parse("http://localhost:8080/matier/add?classId=$classId"),
+      Uri.parse("http://localhost:8080/matier/add/$classId"),
       headers: {"Content-type": "Application/json"},
       body: jsonEncode(<String, dynamic>{
         "matiereName": matier.matiereName,
