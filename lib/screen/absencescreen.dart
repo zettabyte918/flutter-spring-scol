@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart';
+import 'package:tp70/entities/absence.dart';
 import 'package:tp70/entities/student.dart';
 import 'package:tp70/services/classeservice.dart';
 import 'package:tp70/entities/matier.dart';
@@ -22,6 +23,7 @@ class AbsenceScreenState extends State<AbsenceScreen> {
   List<Student> students = [];
   Classe? selectedClass;
   Student? selectedStudent;
+  List<Absence>? absences;
 
   @override
   void initState() {
@@ -51,6 +53,22 @@ class AbsenceScreenState extends State<AbsenceScreen> {
       });
     } else {
       throw Exception("Failed to load students");
+    }
+  }
+
+  Future<void> getAbsenceByStudentId(Student selectedStudent) async {
+    Response response = await http.get(Uri.parse(
+        "http://localhost:8080/absence/getByEtudiantId/${selectedStudent.id}"));
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      List<Absence> studentAbcenses =
+          data.map((json) => Absence.fromJson(json)).toList();
+      setState(() {
+        absences = studentAbcenses;
+      });
+      print(absences![0].etudiant?.nom);
+    } else {
+      throw Exception("Failed to load absences");
     }
   }
 
@@ -86,6 +104,7 @@ class AbsenceScreenState extends State<AbsenceScreen> {
               setState(() {
                 selectedStudent = value;
                 // Fetch students absence
+                getAbsenceByStudentId(selectedStudent!);
               });
             },
             items: students.map((Student student) {
