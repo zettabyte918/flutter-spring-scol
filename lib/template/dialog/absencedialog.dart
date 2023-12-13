@@ -14,13 +14,15 @@ class AbsenceDialog extends StatefulWidget {
   final Function()? getAllAbsence;
   Absence? absence;
   List<Matier>? matieres;
+  bool? modif = false;
 
   AbsenceDialog(
       {super.key,
       @required this.notifyParent,
       this.getAllAbsence,
       this.matieres,
-      this.absence});
+      this.absence,
+      this.modif});
   @override
   State<AbsenceDialog> createState() => AbsenceDialogState();
 }
@@ -75,9 +77,7 @@ class AbsenceDialogState extends State<AbsenceDialog> {
     }
   }
 
-  bool modif = false;
-
-  late int idMatier;
+  late int? idAbsence;
 
   @override
   void initState() {
@@ -87,13 +87,12 @@ class AbsenceDialogState extends State<AbsenceDialog> {
     // TODO: implement initState
     super.initState();
 
-    // if (widget.matier != null) {
-    //   modif = true;
-    //   title = "Modifier matier";
-    //   nameMat.text = (widget.matier!.matiereName).toString();
-    //   coefMat.text = (widget.matier!.matiereCoef).toString();
-    //   idMatier = widget.matier!.matiereId!;
-    // }
+    if (widget.absence != null) {
+      title = "Modifier Absence";
+      nbhAbsence.text = (widget.absence?.absenceNb).toString();
+      dateAbsence.text = (widget.absence?.date).toString();
+      idAbsence = widget.absence?.absenceId;
+    }
   }
 
   @override
@@ -138,21 +137,29 @@ class AbsenceDialogState extends State<AbsenceDialog> {
             ),
             ElevatedButton(
                 onPressed: () async {
-                  if (modif == false) {
-                    await addAbsence(Absence(
-                            double.parse(nbhAbsence.text),
-                            dateAbsence.text,
-                            absence?.etudiant,
-                            selectedMatiere))
+                  if (widget.modif == false) {
+                    print("inserting");
+
+                    await addAbsence(Absence(double.parse(nbhAbsence.text),
+                            dateAbsence.text, null, null))
                         .then((value) => {
                               // get new added absence
                               widget.getAllAbsence!(),
                               widget.notifyParent!()
                             });
                   } else {
-                    print("add");
-
-                    widget.notifyParent!();
+                    print("updating");
+                    await updateAbsence(Absence(
+                            double.parse(nbhAbsence.text),
+                            dateAbsence.text,
+                            absence?.etudiant,
+                            selectedMatiere,
+                            absence?.absenceId))
+                        .then((value) => {
+                              // get new added absence
+                              widget.getAllAbsence!(),
+                              widget.notifyParent!()
+                            });
                   }
                   Navigator.pop(context);
                 },

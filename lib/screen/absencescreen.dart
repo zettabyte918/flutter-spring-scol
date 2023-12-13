@@ -108,9 +108,10 @@ class AbsenceScreenState extends State<AbsenceScreen> {
             onChanged: (Student? value) {
               setState(() {
                 selectedStudent = value;
-                // Fetch students absence
-                getAbsenceByStudentId();
               });
+
+              // Fetch students absence
+              getAbsenceByStudentId();
             },
             items: students.map((Student student) {
               return DropdownMenuItem<Student>(
@@ -133,7 +134,22 @@ class AbsenceScreenState extends State<AbsenceScreen> {
                     children: [
                       SlidableAction(
                         onPressed: (context) async {
-                          print("test");
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AbsenceDialog(
+                                  notifyParent: refresh,
+                                  getAllAbsence: getAbsenceByStudentId,
+                                  matieres: selectedClass?.matieres,
+                                  absence: Absence(
+                                      absences?.elementAt(index).absenceNb,
+                                      absences?.elementAt(index).date,
+                                      selectedStudent,
+                                      absences?.elementAt(index).matiere,
+                                      absences?.elementAt(index).absenceId),
+                                  modif: true,
+                                );
+                              });
                         },
                         backgroundColor: const Color(0xFF21B7CA),
                         foregroundColor: Colors.white,
@@ -145,7 +161,8 @@ class AbsenceScreenState extends State<AbsenceScreen> {
                   endActionPane: ActionPane(
                     motion: ScrollMotion(),
                     dismissible: DismissiblePane(onDismissed: () async {
-                      print("delete absence");
+                      deleteAbsence(absences?.elementAt(index).absenceId);
+                      getAbsenceByStudentId();
                     }),
                     children: [Container()],
                   ),
@@ -234,6 +251,7 @@ class AbsenceScreenState extends State<AbsenceScreen> {
                   getAllAbsence: getAbsenceByStudentId,
                   matieres: selectedClass?.matieres,
                   absence: Absence(0, "", selectedStudent, null, null),
+                  modif: false,
                 );
               });
           //print("test");

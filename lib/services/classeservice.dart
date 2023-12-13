@@ -32,6 +32,8 @@ Future<List<Matier>> getAllMatiers() async {
   return matieres;
 }
 
+// absence
+
 Future addAbsence(Absence absence) async {
   Response response =
       await http.post(Uri.parse("http://localhost:8080/absence/add"),
@@ -44,6 +46,26 @@ Future addAbsence(Absence absence) async {
           }));
 
   return response.body;
+}
+
+Future updateAbsence(Absence absence) async {
+  Response response =
+      await http.put(Uri.parse("http://localhost:8080/absence/update"),
+          headers: {"Content-type": "Application/json"},
+          body: jsonEncode(<String, dynamic>{
+            "absenceId": absence.absenceId,
+            "absenceNb": absence.absenceNb,
+            "etudiant": {"id": absence.etudiant?.id},
+            "matiere": {"matiereId": absence.matiere?.matiereId},
+            "date": absence.date
+          }));
+
+  return response.body;
+}
+
+Future deleteAbsence(int? id) {
+  return http
+      .delete(Uri.parse("http://localhost:8080/absence/delete?id=${id}"));
 }
 
 Future addMatier(Matier matier, int classId) async {
