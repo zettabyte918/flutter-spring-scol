@@ -140,8 +140,12 @@ class AbsenceDialogState extends State<AbsenceDialog> {
                   if (widget.modif == false) {
                     print("inserting");
 
-                    await addAbsence(Absence(double.parse(nbhAbsence.text),
-                            dateAbsence.text, null, null))
+                    await addAbsence(Absence(
+                            double.parse(nbhAbsence.text),
+                            dateAbsence.text,
+                            absence?.etudiant,
+                            selectedMatiere,
+                            absence?.absenceId))
                         .then((value) => {
                               // get new added absence
                               widget.getAllAbsence!(),
