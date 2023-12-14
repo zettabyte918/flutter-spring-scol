@@ -165,7 +165,7 @@ class AbsenceScreen_1State extends State<AbsenceScreen_1> {
           TextFormField(
             controller: dateCtrl,
             readOnly: true,
-            decoration: const InputDecoration(labelText: "Date de naissance"),
+            decoration: const InputDecoration(labelText: "Date"),
             onTap: () {
               _selectDate(context);
             },
