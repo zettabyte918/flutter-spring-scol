@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:tp70/entities/absence.dart';
+import 'package:tp70/entities/etudiant_total_hours.dart';
 import 'package:tp70/entities/student.dart';
 import 'package:tp70/services/classeservice.dart';
 import 'package:tp70/entities/matier.dart';
@@ -45,6 +46,7 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
             DateFormat("yyyy-MM-dd").format(DateTime.parse(picked.toString()));
         selectedDate = picked;
         getAbsenceByMatiereAndDate();
+        getAbsenceByMatiereAndDateWithTotalHours();
       });
     }
   }
@@ -110,6 +112,39 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
       List<dynamic> data = jsonDecode(response.body);
       List<Absence> matiereDateAbsences =
           data.map((json) => Absence.fromJson(json)).toList();
+
+      setState(() {
+        absences = matiereDateAbsences;
+      });
+    } else {
+      throw Exception("Failed to load absences");
+    }
+  }
+
+  Map<int, double> etudiantTotalHours =
+      {}; // Map to store total hours for each student
+  Future<void> getAbsenceByMatiereAndDateWithTotalHours() async {
+    // Format the date as needed (e.g., "2023-12-14")
+    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+    String url =
+        "http://localhost:8080/absence/getByMatiereIdAndDateWithTotal/?matiereId=${this.selectedMatiere?.matiereId.toString()}&date=${formattedDate}";
+    print(url);
+    Response response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+
+      // Extracting total hours for each student
+      Map<String, dynamic> etudiantTotalHoursMap = data['etudiantTotalHours'];
+      etudiantTotalHours = etudiantTotalHoursMap
+          .map((key, value) => MapEntry(int.parse(key), value.toDouble()));
+
+      print(etudiantTotalHours);
+
+      // Extracting absences
+      List<Absence> matiereDateAbsences = (data['absences'] as List)
+          .map((json) => Absence.fromJson(json))
+          .toList();
 
       setState(() {
         absences = matiereDateAbsences;
@@ -194,8 +229,20 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
             itemCount: absences?.length ?? 1,
             itemBuilder: (BuildContext context, int index) {
               if (absences != null) {
+                // Use a Set to keep track of unique etudiant IDs
+                Map<int, Absence> uniqueEtudiantAbsences = {};
+
+                // Filter absences to only include one for each etudiant
+                absences!.forEach((absence) {
+                  uniqueEtudiantAbsences[absence.etudiant?.id ?? -1] = absence;
+                });
+
+                List<Absence> filteredAbsences =
+                    uniqueEtudiantAbsences.values.toList();
+
                 return Slidable(
-                  key: Key(absences!.elementAt(index).absenceId.toString()),
+                  key: Key(
+                      filteredAbsences.elementAt(index).absenceId.toString()),
                   startActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
@@ -209,11 +256,17 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
                                   getAllAbsence: getAbsenceByStudentId,
                                   matieres: selectedClass?.matieres,
                                   absence: Absence(
-                                      absences?.elementAt(index).absenceNb,
-                                      absences?.elementAt(index).date,
+                                      filteredAbsences
+                                          ?.elementAt(index)
+                                          .absenceNb,
+                                      filteredAbsences?.elementAt(index).date,
                                       selectedStudent,
-                                      absences?.elementAt(index).matiere,
-                                      absences?.elementAt(index).absenceId),
+                                      filteredAbsences
+                                          ?.elementAt(index)
+                                          .matiere,
+                                      filteredAbsences
+                                          ?.elementAt(index)
+                                          .absenceId),
                                   modif: true,
                                 );
                               });
@@ -228,7 +281,8 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
                   endActionPane: ActionPane(
                     motion: ScrollMotion(),
                     dismissible: DismissiblePane(onDismissed: () async {
-                      deleteAbsence(absences?.elementAt(index).absenceId);
+                      deleteAbsence(
+                          filteredAbsences?.elementAt(index).absenceId);
                       getAbsenceByStudentId();
                     }),
                     children: [Container()],
@@ -247,7 +301,7 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
                                   "Student name: ",
                                 ),
                                 Text(
-                                  "${absences!.elementAt(index).etudiant?.nom} ${absences!.elementAt(index).etudiant?.prenom}",
+                                  "${filteredAbsences!.elementAt(index).etudiant?.nom} ${filteredAbsences!.elementAt(index).etudiant?.prenom}",
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -256,15 +310,16 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
                             ),
                             Row(
                               children: [
-                                const Text("Hours number: "),
+                                const Text("Total Hours number: "),
                                 Text(
-                                  absences!
-                                      .elementAt(index)
-                                      .absenceNb
+                                  etudiantTotalHours[filteredAbsences!
+                                          .elementAt(index)
+                                          .etudiant
+                                          ?.id]
                                       .toString(),
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontWeight: FontWeight.bold,
+                                      backgroundColor: Colors.red),
                                 ),
                                 const SizedBox(
                                   width: 2.0,
@@ -275,7 +330,7 @@ class AbsenceScreen_2State extends State<AbsenceScreen_2> {
                               children: [
                                 const Text("Matiere name: "),
                                 Text(
-                                    absences
+                                    filteredAbsences
                                             ?.elementAt(index)
                                             .matiere
                                             ?.matiereName ??
